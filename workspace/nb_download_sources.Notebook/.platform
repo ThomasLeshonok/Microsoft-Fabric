@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_download_sources",
+    "description": "Downloads a list of URLs by calling nb_http_download once per source."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "037dcd0f-07a0-4ef6-b66a-264ae5b089f5"
+  }
+}

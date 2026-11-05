@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_ingest_openaq",
+    "description": "Notebook fallback for df_openaq_nyc: NYC locations, sensors and daily aggregates from OpenAQ v3."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c7d16ab0-c07f-4daf-a4ba-9fc2e3819f78"
+  }
+}

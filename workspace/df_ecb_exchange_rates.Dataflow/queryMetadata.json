@@ -1,0 +1,23 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "df_ecb_exchange_rates",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "bronze_ecb_exchange_rates": {
+      "queryId": "e3dfd86f-007c-4795-a9ff-c2f5d23f857a",
+      "queryName": "bronze_ecb_exchange_rates",
+      "loadEnabled": true
+    },
+    "bronze_ecb_exchange_rates_DataDestination": {
+      "queryId": "58d772cf-9d79-4e72-8bee-e19dd8f207bc",
+      "queryName": "bronze_ecb_exchange_rates_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "fastCombine": false,
+  "allowNativeQueries": true,
+  "skipAutomaticTypeAndHeaderDetection": false
+}

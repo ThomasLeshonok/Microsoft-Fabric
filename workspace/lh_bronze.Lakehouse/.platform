@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "lh_bronze",
+    "description": "Bronze landing zone from 2016-03: Files/ECB_FX, Files/NY_GDP, Files/nyctaxi_yellow, Files/OpenAQ and bronze_* tables."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d8e27bc1-d18a-4eb0-b5cb-a0d3f492a089"
+  }
+}

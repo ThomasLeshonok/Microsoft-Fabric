@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Dataflow",
+    "displayName": "df_ecb_exchange_rates",
+    "description": "ECB EXR daily reference rates CSV landed as lakehouse table bronze_ecb_exchange_rates."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8c579f89-3999-49f8-8aa6-3ac6cd44904a"
+  }
+}

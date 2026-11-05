@@ -1,0 +1,85 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "df_openaq_nyc",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "OpenAQApiKey": {
+      "queryId": "2210aab4-51f1-43c3-99aa-62f013db645c",
+      "queryName": "OpenAQApiKey",
+      "loadEnabled": false
+    },
+    "NycBoundingBox": {
+      "queryId": "9792c7bc-dc27-4485-b929-5e54975aa351",
+      "queryName": "NycBoundingBox",
+      "loadEnabled": false
+    },
+    "DateFrom": {
+      "queryId": "79e41f18-b79c-4a7e-be6f-e06965824b0f",
+      "queryName": "DateFrom",
+      "loadEnabled": false
+    },
+    "DateTo": {
+      "queryId": "73f6e37a-80ca-4beb-96f3-a2b9b3298126",
+      "queryName": "DateTo",
+      "loadEnabled": false
+    },
+    "OpenAQWindow": {
+      "queryId": "e0f3a7c2-1b4d-4e8f-9a6b-7c5d3e2f1a09",
+      "queryName": "OpenAQWindow",
+      "loadEnabled": false
+    },
+    "PollutantParameters": {
+      "queryId": "8107b346-e6d6-45fc-a88c-5902db202429",
+      "queryName": "PollutantParameters",
+      "loadEnabled": false
+    },
+    "OpenAQGetAllPages": {
+      "queryId": "ececded5-7f2d-4ce5-a4f5-4f41a0b540d2",
+      "queryName": "OpenAQGetAllPages",
+      "loadEnabled": false
+    },
+    "openaq_locations_raw": {
+      "queryId": "f7a451fd-82c3-4176-82dd-5f7fea0a37f5",
+      "queryName": "openaq_locations_raw",
+      "loadEnabled": false
+    },
+    "bronze_openaq_locations": {
+      "queryId": "0d6a9f43-5f0e-4c39-9d43-2e5b7c1a8f01",
+      "queryName": "bronze_openaq_locations",
+      "loadEnabled": true
+    },
+    "bronze_openaq_sensors": {
+      "queryId": "1e7b0a54-6a1f-4d4a-8e54-3f6c8d2b9a12",
+      "queryName": "bronze_openaq_sensors",
+      "loadEnabled": true
+    },
+    "bronze_openaq_sensor_days": {
+      "queryId": "2f8c1b65-7b2a-4e5b-9f65-4a7d9e3cab23",
+      "queryName": "bronze_openaq_sensor_days",
+      "loadEnabled": true
+    },
+    "bronze_openaq_locations_DataDestination": {
+      "queryId": "3a9d2c76-8c3b-4f6c-a076-5b8eaf4dbc34",
+      "queryName": "bronze_openaq_locations_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "bronze_openaq_sensors_DataDestination": {
+      "queryId": "4bae3d87-9d4c-4a7d-b187-6c9fb05ecd45",
+      "queryName": "bronze_openaq_sensors_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "bronze_openaq_sensor_days_DataDestination": {
+      "queryId": "5cbf4e98-ae5d-4b8e-8298-7da0c16fde56",
+      "queryName": "bronze_openaq_sensor_days_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "fastCombine": true,
+  "allowNativeQueries": true,
+  "skipAutomaticTypeAndHeaderDetection": false
+}

@@ -1,0 +1,23 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "df_worldbank_indicators",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "bronze_worldbank_indicators": {
+      "queryId": "aa409345-418f-4d9e-b244-81467998f25a",
+      "queryName": "bronze_worldbank_indicators",
+      "loadEnabled": true
+    },
+    "bronze_worldbank_indicators_DataDestination": {
+      "queryId": "4a4250bf-73b4-4a87-a517-73eafc8b4201",
+      "queryName": "bronze_worldbank_indicators_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "fastCombine": false,
+  "allowNativeQueries": true,
+  "skipAutomaticTypeAndHeaderDetection": false
+}

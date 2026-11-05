@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Dataflow",
+    "displayName": "df_worldbank_indicators",
+    "description": "World Bank indicator JSON (per_page=1000, every page, second array element expanded) landed as bronze_worldbank_indicators."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "77e33d03-6eab-4a4c-a250-4103881fe312"
+  }
+}

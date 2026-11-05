@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_http_download",
+    "description": "Validates a URL, checks it exists and streams any file type into OneLake Files."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5b295d84-03cb-4cc7-827e-b54963eb8b0d"
+  }
+}

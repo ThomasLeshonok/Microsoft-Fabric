@@ -241,3 +241,29 @@ def test_columns_cast_nested_values(openaq):
     assert str(row["date_local"]) == "2024-03-01"
     assert row["has_flags"] is False
     assert row["min"] is None
+
+
+def test_items_reference_lakehouse_by_logical_id():
+    import json
+    import re
+
+    from notebook_loader import WORKSPACE
+
+    lakehouse_id = json.loads((WORKSPACE / "lh_bronze.Lakehouse" / ".platform").read_text(encoding="utf-8"))["config"]["logicalId"]
+    zero_workspace = "00000000-0000-0000-0000-000000000000"
+    pipeline = json.loads((WORKSPACE / "pl_ingest_taxi.DataPipeline" / "pipeline-content.json").read_text(encoding="utf-8"))
+    sinks = re.findall(r'"workspaceId": "([^"]+)",\s*"artifactId": "([^"]+)"', json.dumps(pipeline, indent=2))
+    assert sinks and set(sinks) == {(zero_workspace, lakehouse_id)}
+
+    for notebook in WORKSPACE.glob("*.Notebook/notebook-content.py"):
+        content = notebook.read_text(encoding="utf-8")
+        assert f'"default_lakehouse": "{lakehouse_id}"' in content, notebook
+        assert f'"default_lakehouse_workspace_id": "{zero_workspace}"' in content, notebook
+
+    for mashup in WORKSPACE.glob("*.Dataflow/mashup.pq"):
+        content = mashup.read_text(encoding="utf-8")
+        assert content.count('workspaceId = "."') == content.count("_DataDestination = let") > 0, mashup
+        assert content.count('lakehouseName = "lh_bronze"') == content.count("_DataDestination = let"), mashup
+
+    leftovers = [path for path in WORKSPACE.rglob("*") if path.is_file() and re.search(r"11111111-|22222222-", path.read_text(encoding="utf-8"))]
+    assert leftovers == []

@@ -178,24 +178,24 @@ in
 
 shared bronze_openaq_locations_DataDestination = let
     Pattern = Lakehouse.Contents([CreateNavigationProperties = false, EnableFolding = false]),
-    Navigation_1 = Pattern{[workspaceId = "11111111-1111-1111-1111-111111111111"]}[Data],
-    Navigation_2 = Navigation_1{[lakehouseId = "22222222-2222-2222-2222-222222222222"]}[Data],
+    Navigation_1 = Pattern{[workspaceId = "."]}[Data],
+    Navigation_2 = Navigation_1{[lakehouseName = "lh_bronze"]}[Data],
     TableNavigation = Navigation_2{[Id = "bronze_openaq_locations", ItemKind = "Table"]}?[Data]?
 in
     TableNavigation;
 
 shared bronze_openaq_sensors_DataDestination = let
     Pattern = Lakehouse.Contents([CreateNavigationProperties = false, EnableFolding = false]),
-    Navigation_1 = Pattern{[workspaceId = "11111111-1111-1111-1111-111111111111"]}[Data],
-    Navigation_2 = Navigation_1{[lakehouseId = "22222222-2222-2222-2222-222222222222"]}[Data],
+    Navigation_1 = Pattern{[workspaceId = "."]}[Data],
+    Navigation_2 = Navigation_1{[lakehouseName = "lh_bronze"]}[Data],
     TableNavigation = Navigation_2{[Id = "bronze_openaq_sensors", ItemKind = "Table"]}?[Data]?
 in
     TableNavigation;
 
 shared bronze_openaq_sensor_days_DataDestination = let
     Pattern = Lakehouse.Contents([CreateNavigationProperties = false, EnableFolding = false]),
-    Navigation_1 = Pattern{[workspaceId = "11111111-1111-1111-1111-111111111111"]}[Data],
-    Navigation_2 = Navigation_1{[lakehouseId = "22222222-2222-2222-2222-222222222222"]}[Data],
+    Navigation_1 = Pattern{[workspaceId = "."]}[Data],
+    Navigation_2 = Navigation_1{[lakehouseName = "lh_bronze"]}[Data],
     TableNavigation = Navigation_2{[Id = "bronze_openaq_sensor_days", ItemKind = "Table"]}?[Data]?
 in
     TableNavigation;

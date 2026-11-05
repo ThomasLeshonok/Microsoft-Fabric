@@ -23,8 +23,8 @@ in
 
 shared bronze_ecb_exchange_rates_DataDestination = let
     Pattern = Lakehouse.Contents([CreateNavigationProperties = false, EnableFolding = false]),
-    Navigation_1 = Pattern{[workspaceId = "11111111-1111-1111-1111-111111111111"]}[Data],
-    Navigation_2 = Navigation_1{[lakehouseId = "22222222-2222-2222-2222-222222222222"]}[Data],
+    Navigation_1 = Pattern{[workspaceId = "."]}[Data],
+    Navigation_2 = Navigation_1{[lakehouseName = "lh_bronze"]}[Data],
     TableNavigation = Navigation_2{[Id = "bronze_ecb_exchange_rates", ItemKind = "Table"]}?[Data]?
 in
     TableNavigation;

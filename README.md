@@ -55,21 +55,36 @@ URL path, and an extension is added from `Content-Type` when the path has none
 (`.../EXR/D.USD.EUR.SP00.A?format=csvdata` becomes `D.USD.EUR.SP00.A.csv`). An invalid URL raises `InvalidUrlError`;
 an HTTP status of 400 or above, or an unreachable host, raises `UrlNotFoundError`.
 
-## Placeholders
+## References between items
 
-| Placeholder | Meaning | Where |
-|---|---|---|
-| `11111111-1111-1111-1111-111111111111` | workspace id | notebooks, pipeline, dataflow destinations |
-| `22222222-2222-2222-2222-222222222222` | `lh_bronze` lakehouse id | notebooks, pipeline, dataflow destinations |
-| `33333333-3333-3333-3333-333333333333` | HTTP connection id, base URL `https://d37ci6vzurychx.cloudfront.net/`, Anonymous | pipeline |
+Every item points to `lh_bronze` without hard-coded workspace or lakehouse GUIDs:
 
-`workspace/parameter.yml` replaces them when you publish with fabric-cicd. With plain Git sync, re-attach `lh_bronze`
-in each notebook, pick the connection in both Copy activities, and re-select the destination in each dataflow.
+| Item | Reference to `lh_bronze` |
+|---|---|
+| notebooks (`META dependencies.lakehouse`) | `default_lakehouse` = `lh_bronze` logicalId `d8e27bc1-d18a-4eb0-b5cb-a0d3f492a089`, `default_lakehouse_workspace_id` = `00000000-0000-0000-0000-000000000000` (current workspace) |
+| pipeline sinks | `artifactId` = the same logicalId, `workspaceId` = `00000000-0000-0000-0000-000000000000` |
+| dataflow destinations | relative reference: `workspaceId = "."` and `lakehouseName = "lh_bronze"` |
+
+Fabric Git sync and fabric-cicd both resolve logicalId + zero workspace to the item in the target workspace. Keep
+`lh_bronze.Lakehouse/.platform` in the repo: its logicalId is what the others depend on. If you create `lh_bronze` by
+hand in the workspace before syncing, the logicalIds won't match.
+
+The only remaining placeholder is the HTTP connection, `33333333-3333-3333-3333-333333333333` in both pipeline Copy
+sources. Connections are tenant objects, not workspace items, so neither tool can resolve them.
 
 ## Deploy
 
-1. In Fabric, create an HTTP connection to `https://d37ci6vzurychx.cloudfront.net/` (Anonymous) and put its id in
-   `parameter.yml` in place of `<http-connection-id-...>`.
+### Fabric Git integration
+
+1. In Fabric, create an HTTP connection to `https://d37ci6vzurychx.cloudfront.net/` (Anonymous). Put its id in
+   `workspace/pl_ingest_taxi.DataPipeline/pipeline-content.json` in place of `33333333-...`, or select it in both Copy
+   activities after the sync and commit from Fabric.
+2. Connect the workspace to this repo with folder `workspace`, then **Update all**.
+3. Open each dataflow once, bind credentials, and **Save**. Fabric requires a manual save after Git sync.
+
+### fabric-cicd
+
+1. Create the HTTP connection as above and put its id in `workspace/parameter.yml` in place of `<http-connection-id-...>`.
 2. Publish:
    ```bash
    az login

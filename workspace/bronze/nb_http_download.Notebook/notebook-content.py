@@ -285,6 +285,12 @@ if url:
     download_request = DownloadRequest(url, target_folder, file_name, parse_headers(headers_json))
     download_result = build_downloader(request_timeout_seconds).download(download_request)
     print(json.dumps(asdict(download_result), indent=2))
+
+runtime_context = notebookutils.runtime.context
+if runtime_context["isForInteractive"] and not runtime_context["isReferenceRun"]:
+    notebookutils.session.stop()
+
+if url:
     notebookutils.notebook.exit(json.dumps(asdict(download_result)))
 
 # METADATA ********************

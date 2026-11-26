@@ -3,7 +3,7 @@
   "metadata": {
     "type": "Lakehouse",
     "displayName": "lh_bronze",
-    "description": "Bronze landing zone from 2016-03: Files/ECB_FX, Files/NY_GDP, Files/nyctaxi_yellow, Files/OpenAQ and bronze_* tables."
+    "description": "Bronze landing zone from 2016-03: Files/nyctaxi_yellow, Files/OpenAQ and bronze_* tables."
   },
   "config": {
     "version": "2.0",

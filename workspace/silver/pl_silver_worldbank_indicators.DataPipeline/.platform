@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_silver_worldbank_indicators",
+    "description": "Schedule after df_worldbank_indicators. Runs nb_silver_worldbank_indicators with load_mode append_missing: appends only the years after the latest year per indicator and country in silver_worldbank_indicators, never overwrites a year."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "815b7af5-0d40-4f1e-978e-0dd739833598"
+  }
+}

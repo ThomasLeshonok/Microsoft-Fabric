@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_worldbank_indicators",
+    "description": "Cleans bronze World Bank indicators: drops redundant columns, non-annual periods and missing values, keeps the latest ingestion per indicator, country and year, adds period start/end dates. Overwrites silver_worldbank_indicators."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a4edf343-bb6c-46c4-8801-2c3946b12cba"
+  }
+}

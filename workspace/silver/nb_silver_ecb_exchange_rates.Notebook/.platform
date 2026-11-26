@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_ecb_exchange_rates",
+    "description": "Cleans bronze ECB exchange rates: drops redundant SDMX columns and invalid rates, keeps the latest ingestion per currency pair and day, fills weekends and holidays with the last published rate, adds date attributes. Overwrites silver_ecb_exchange_rates."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a0848af0-1a8d-497a-ade7-1a24593da690"
+  }
+}

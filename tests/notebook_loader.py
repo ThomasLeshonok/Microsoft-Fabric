@@ -5,8 +5,15 @@ WORKSPACE = Path(__file__).resolve().parents[1] / "workspace"
 CODE_CELL_HEADERS = {"# CELL ********************", "# PARAMETERS CELL ********************"}
 
 
+def item_folder(item: str) -> Path:
+    folders = list(WORKSPACE.rglob(item))
+    if len(folders) != 1:
+        raise FileNotFoundError(f"expected exactly one {item} under {WORKSPACE}, found {len(folders)}")
+    return folders[0]
+
+
 def code_cells(notebook_name: str) -> list:
-    text = (WORKSPACE / f"{notebook_name}.Notebook" / "notebook-content.py").read_text(encoding="utf-8")
+    text = (item_folder(f"{notebook_name}.Notebook") / "notebook-content.py").read_text(encoding="utf-8")
     cells, current = [], None
     for line in text.splitlines():
         if line.startswith("# ") and line.endswith("********************"):
@@ -23,6 +30,8 @@ def fake_notebookutils() -> SimpleNamespace:
         fs=SimpleNamespace(mkdirs=lambda path: True, exists=lambda path: False, rm=lambda path: True, cp=lambda src, dst: True),
         notebook=SimpleNamespace(run=None, exit=lambda value: None),
         credentials=SimpleNamespace(getSecret=lambda vault, name: "secret"),
+        runtime=SimpleNamespace(context={"isForInteractive": False, "isReferenceRun": False}),
+        session=SimpleNamespace(stop=lambda: None),
     )
 
 

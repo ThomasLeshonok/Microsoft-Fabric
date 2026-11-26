@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_gold_hourly",
+    "description": "Schedule hourly after pl_silver_air_quality. Runs nb_gold_star_schema with append_missing: appends only the settled hours after the latest DateKey and HourKey of FactAirQualityHourly."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d44b85a2-59e6-467a-9e8d-171ee34244cf"
+  }
+}

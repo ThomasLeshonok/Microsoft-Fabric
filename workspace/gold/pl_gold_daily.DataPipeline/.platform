@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_gold_daily",
+    "description": "Schedule daily after the silver ECB and air quality daily loads. Runs nb_gold_star_schema with append_missing: appends only the days after the latest DateKey of DimDate, DimFX, FactAirQualityDaily."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6a68aaf4-0403-4c71-bafb-d6ac3c04187d"
+  }
+}

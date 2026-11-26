@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "no2_by_hour_weekend",
+  "position": {
+    "x": 16,
+    "y": 408,
+    "z": 5,
+    "width": 1248,
+    "height": 296,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimHour"
+                    }
+                  },
+                  "Property": "HourLabel"
+                }
+              },
+              "queryRef": "DimHour.HourLabel",
+              "nativeQueryRef": "HourLabel"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "IsWeekend"
+                }
+              },
+              "queryRef": "DimDate.IsWeekend",
+              "nativeQueryRef": "IsWeekend"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactAirQualityHourly"
+                    }
+                  },
+                  "Property": "Hourly NO2 (ppm)"
+                }
+              },
+              "queryRef": "FactAirQualityHourly.Hourly NO2 (ppm)",
+              "nativeQueryRef": "Hourly NO2 (ppm)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'NO2 by hour, weekend vs weekday'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

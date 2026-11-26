@@ -1,0 +1,148 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "busiest_zones",
+  "position": {
+    "x": 16,
+    "y": 408,
+    "z": 9,
+    "width": 828,
+    "height": 296,
+    "tabOrder": 9
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimZone"
+                    }
+                  },
+                  "Property": "Zone"
+                }
+              },
+              "queryRef": "DimZone.Zone",
+              "nativeQueryRef": "Zone"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimZone"
+                    }
+                  },
+                  "Property": "Borough"
+                }
+              },
+              "queryRef": "DimZone.Borough",
+              "nativeQueryRef": "Borough"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Trips"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Trips",
+              "nativeQueryRef": "Trips"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Avg Fare USD"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Avg Fare USD",
+              "nativeQueryRef": "Avg Fare USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Avg Trip Distance (mi)"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Avg Trip Distance (mi)",
+              "nativeQueryRef": "Avg Trip Distance (mi)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Avg Trip Duration (min)"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Avg Trip Duration (min)",
+              "nativeQueryRef": "Avg Trip Duration (min)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "FactTaxiDaily"
+                  }
+                },
+                "Property": "Trips"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Busiest zones'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

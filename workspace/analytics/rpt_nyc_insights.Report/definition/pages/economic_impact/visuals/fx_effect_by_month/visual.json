@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "fx_effect_by_month",
+  "position": {
+    "x": 652,
+    "y": 112,
+    "z": 7,
+    "width": 612,
+    "height": 280,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "lineClusteredColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "MonthStartDate"
+                }
+              },
+              "queryRef": "DimDate.MonthStartDate",
+              "nativeQueryRef": "MonthStartDate"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "FX Effect EUR"
+                }
+              },
+              "queryRef": "FactTaxiDaily.FX Effect EUR",
+              "nativeQueryRef": "FX Effect EUR"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimFX"
+                    }
+                  },
+                  "Property": "Avg USD per EUR"
+                }
+              },
+              "queryRef": "DimFX.Avg USD per EUR",
+              "nativeQueryRef": "Avg USD per EUR"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'FX effect on EUR revenue (columns) and US$ per euro (line)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

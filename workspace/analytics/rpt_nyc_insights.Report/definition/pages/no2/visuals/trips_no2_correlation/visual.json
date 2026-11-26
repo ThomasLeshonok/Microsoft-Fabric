@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "trips_no2_correlation",
+  "position": {
+    "x": 914,
+    "y": 16,
+    "z": 3,
+    "width": 350,
+    "height": 80,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiHourly"
+                    }
+                  },
+                  "Property": "Trips vs NO2 Correlation"
+                }
+              },
+              "queryRef": "FactTaxiHourly.Trips vs NO2 Correlation",
+              "nativeQueryRef": "Trips vs NO2 Correlation"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Trips vs NO2 Correlation'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

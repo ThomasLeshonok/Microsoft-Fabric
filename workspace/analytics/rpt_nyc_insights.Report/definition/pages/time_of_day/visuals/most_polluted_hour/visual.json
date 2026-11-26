@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "most_polluted_hour",
+  "position": {
+    "x": 962,
+    "y": 16,
+    "z": 4,
+    "width": 302,
+    "height": 80,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactAirQualityHourly"
+                    }
+                  },
+                  "Property": "Most Polluted Hour (PM2.5)"
+                }
+              },
+              "queryRef": "FactAirQualityHourly.Most Polluted Hour (PM2.5)",
+              "nativeQueryRef": "Most Polluted Hour (PM2.5)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Most Polluted Hour (PM2.5)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

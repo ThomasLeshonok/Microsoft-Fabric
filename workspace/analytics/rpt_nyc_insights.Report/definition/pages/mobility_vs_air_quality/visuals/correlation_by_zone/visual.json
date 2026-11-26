@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "correlation_by_zone",
+  "position": {
+    "x": 552,
+    "y": 408,
+    "z": 7,
+    "width": 712,
+    "height": 296,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimZone"
+                    }
+                  },
+                  "Property": "Zone"
+                }
+              },
+              "queryRef": "DimZone.Zone",
+              "nativeQueryRef": "Zone"
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactAirQualityHourly"
+                    }
+                  },
+                  "Property": "Pollutant"
+                }
+              },
+              "queryRef": "FactAirQualityHourly.Pollutant",
+              "nativeQueryRef": "Pollutant"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiHourly"
+                    }
+                  },
+                  "Property": "Trips vs Pollution Correlation"
+                }
+              },
+              "queryRef": "FactTaxiHourly.Trips vs Pollution Correlation",
+              "nativeQueryRef": "Trips vs Pollution Correlation"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Trips vs pollution correlation by zone and pollutant'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "trips_and_pm25_by_hour",
+  "position": {
+    "x": 16,
+    "y": 112,
+    "z": 5,
+    "width": 1248,
+    "height": 280,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "lineClusteredColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimHour"
+                    }
+                  },
+                  "Property": "HourLabel"
+                }
+              },
+              "queryRef": "DimHour.HourLabel",
+              "nativeQueryRef": "HourLabel"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiHourly"
+                    }
+                  },
+                  "Property": "Trips per Day in Hour"
+                }
+              },
+              "queryRef": "FactTaxiHourly.Trips per Day in Hour",
+              "nativeQueryRef": "Trips per Day in Hour"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactAirQualityHourly"
+                    }
+                  },
+                  "Property": "Hourly PM2.5 (µg/m³)"
+                }
+              },
+              "queryRef": "FactAirQualityHourly.Hourly PM2.5 (µg/m³)",
+              "nativeQueryRef": "Hourly PM2.5 (µg/m³)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Trips per day (columns) and PM2.5 (line) by hour'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

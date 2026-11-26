@@ -1,0 +1,144 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "growth_by_year",
+  "position": {
+    "x": 552,
+    "y": 408,
+    "z": 9,
+    "width": 712,
+    "height": 296,
+    "tabOrder": 9
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              },
+              "queryRef": "DimDate.Year",
+              "nativeQueryRef": "Year"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Trips YoY %"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Trips YoY %",
+              "nativeQueryRef": "Trips YoY %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Revenue YoY %"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Revenue YoY %",
+              "nativeQueryRef": "Revenue YoY %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimGDP"
+                    }
+                  },
+                  "Property": "US GDP Growth %"
+                }
+              },
+              "queryRef": "DimGDP.US GDP Growth %",
+              "nativeQueryRef": "US GDP Growth %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactTaxiDaily"
+                    }
+                  },
+                  "Property": "Revenue per US$1bn GDP"
+                }
+              },
+              "queryRef": "FactTaxiDaily.Revenue per US$1bn GDP",
+              "nativeQueryRef": "Revenue per US$1bn GDP"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactAirQualityDaily"
+                    }
+                  },
+                  "Property": "PM2.5 (µg/m³)"
+                }
+              },
+              "queryRef": "FactAirQualityDaily.PM2.5 (µg/m³)",
+              "nativeQueryRef": "PM2.5 (µg/m³)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "FactAirQualityDaily"
+                    }
+                  },
+                  "Property": "PM2.5 YoY %"
+                }
+              },
+              "queryRef": "FactAirQualityDaily.PM2.5 YoY %",
+              "nativeQueryRef": "PM2.5 YoY %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Growth vs environment by year'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

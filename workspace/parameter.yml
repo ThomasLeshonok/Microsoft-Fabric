@@ -3,3 +3,8 @@ find_replace:
     replace_value:
       DEV: "<http-connection-id-for-d37ci6vzurychx.cloudfront.net>"
     item_type: "DataPipeline"
+  - find_value: "wh-gold-sql-endpoint.datawarehouse.fabric.microsoft.com"
+    replace_value:
+      DEV: "$items.Warehouse.wh_gold.$sqlendpoint"
+    item_type: "SemanticModel"
+    item_name: "sm_gold"

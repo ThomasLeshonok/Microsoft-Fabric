@@ -1,0 +1,51 @@
+/// ECB daily reference rate per currency pair and day; weekends and holidays carry the last published rate forward.
+table DimFX
+
+	/// Mean ECB EUR/USD reference rate (US$ per euro) over the days in context, weekends and holidays carried forward.
+	measure 'Avg USD per EUR' =
+			CALCULATE (
+				AVERAGE ( DimFX[ExchangeRate] ),
+				DimFX[BaseCurrency] = "EUR",
+				DimFX[QuoteCurrency] = "USD"
+			)
+		formatString: 0.000
+		displayFolder: Economy
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	/// Currency priced by the rate, ISO 4217 code (EUR).
+	column BaseCurrency
+		dataType: string
+		summarizeBy: none
+		sourceColumn: BaseCurrency
+
+	/// Currency the rate is expressed in, ISO 4217 code (USD).
+	column QuoteCurrency
+		dataType: string
+		summarizeBy: none
+		sourceColumn: QuoteCurrency
+
+	column ExchangeRate
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: ExchangeRate
+
+	/// False on days that carry the last published rate forward (weekends, ECB holidays).
+	column IsPublished
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: IsPublished
+
+	partition DimFX = entity
+		mode: directLake
+		source
+			entityName: DimFX
+			schemaName: dbo
+			expressionSource: DatabaseQuery

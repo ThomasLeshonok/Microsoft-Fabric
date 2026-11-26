@@ -1,0 +1,42 @@
+/// NYC TLC taxi zones; ZoneKey -1 holds trips and sensors outside every zone.
+table DimZone
+
+	column ZoneKey
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: ZoneKey
+
+	/// Borough of the zone; Airports for Newark, JFK and LaGuardia.
+	column Borough
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Borough
+
+	/// TLC taxi zone name.
+	column Zone
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Zone
+
+	/// TLC service zone (Yellow Zone, Boro Zone, Airports, EWR).
+	column ServiceZone
+		dataType: string
+		summarizeBy: none
+		sourceColumn: ServiceZone
+
+	/// New York City for the five boroughs, otherwise outside New York City.
+	column City
+		dataType: string
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: City
+
+	partition DimZone = entity
+		mode: directLake
+		source
+			entityName: DimZone
+			schemaName: dbo
+			expressionSource: DatabaseQuery

@@ -1,0 +1,51 @@
+relationship b9426836-9b26-4543-b603-6e5ee4df46b9
+	fromColumn: FactTaxiDaily.DateKey
+	toColumn: DimDate.DateKey
+
+relationship e17c640c-08d2-438b-a879-72a25151e853
+	fromColumn: FactTaxiDaily.ZoneKey
+	toColumn: DimZone.ZoneKey
+
+relationship 6e801b51-2e42-4c15-a2b9-5dc0c7ac2dba
+	fromColumn: FactTaxiDaily.TripEndKey
+	toColumn: DimTripEnd.TripEndKey
+
+relationship a3392d1e-2d9e-48fd-aa0c-7f555e30cab2
+	fromColumn: FactAirQualityDaily.DateKey
+	toColumn: DimDate.DateKey
+
+relationship 2ab5d1a3-1a1d-485a-839a-769e7e62eba8
+	fromColumn: FactAirQualityDaily.ZoneKey
+	toColumn: DimZone.ZoneKey
+
+relationship 95f01d41-bc89-41f5-9d88-05478abe9b44
+	fromColumn: DimFX.DateKey
+	toColumn: DimDate.DateKey
+
+relationship 2bd3b12a-f909-4c01-9eb4-c21b3987df10
+	fromColumn: FactTaxiHourly.DateKey
+	toColumn: DimDate.DateKey
+
+relationship 0c61b9f0-d5c2-4944-a115-153f77d3f0ed
+	fromColumn: FactTaxiHourly.HourKey
+	toColumn: DimHour.HourKey
+
+relationship 79141445-ab5c-422d-89fc-f2e2d93056d2
+	fromColumn: FactTaxiHourly.ZoneKey
+	toColumn: DimZone.ZoneKey
+
+relationship 5dadb6f1-f53e-4a46-87f1-ba444d94e6b0
+	fromColumn: FactTaxiHourly.TripEndKey
+	toColumn: DimTripEnd.TripEndKey
+
+relationship d7cf57bb-8cfa-43cc-b3c1-e09016f4eca3
+	fromColumn: FactAirQualityHourly.DateKey
+	toColumn: DimDate.DateKey
+
+relationship 75e22e1a-b8be-473a-99c8-596f4f6ecfea
+	fromColumn: FactAirQualityHourly.HourKey
+	toColumn: DimHour.HourKey
+
+relationship 41d156e4-45d8-4624-803f-35abaf01dd68
+	fromColumn: FactAirQualityHourly.ZoneKey
+	toColumn: DimZone.ZoneKey

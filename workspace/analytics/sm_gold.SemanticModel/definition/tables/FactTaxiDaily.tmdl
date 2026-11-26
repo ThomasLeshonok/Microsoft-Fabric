@@ -1,0 +1,212 @@
+/// NYC TLC taxi trips per day, zone and trip end, amounts in US$ and in EUR at the day's ECB rate.
+table FactTaxiDaily
+
+	/// Number of taxi trips at the selected trip end, Pickup unless exactly one end is selected, so a trip never counts twice.
+	measure Trips =
+			IF (
+				HASONEVALUE ( DimTripEnd[TripEnd] ),
+				SUM ( FactTaxiDaily[TripCount] ),
+				CALCULATE ( SUM ( FactTaxiDaily[TripCount] ), DimTripEnd[TripEnd] = "Pickup" )
+			)
+		formatString: #,0
+		displayFolder: Mobility
+
+	/// Mean daily trips over the days in context that have trips.
+	measure 'Trips per Day' = AVERAGEX ( VALUES ( DimDate[Date] ), [Trips] )
+		formatString: #,0
+		displayFolder: Mobility
+
+	/// Trips versus the same period last year.
+	measure 'Trips YoY %' =
+			VAR ValueLastYear = CALCULATE ( [Trips], SAMEPERIODLASTYEAR ( DimDate[Date] ) )
+			RETURN
+				DIVIDE ( [Trips] - ValueLastYear, ValueLastYear )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Mobility
+
+	/// Passengers carried, as reported by the driver, at the selected trip end, Pickup unless exactly one end is selected, so a trip never counts twice.
+	measure Passengers =
+			IF (
+				HASONEVALUE ( DimTripEnd[TripEnd] ),
+				SUM ( FactTaxiDaily[PassengerCount] ),
+				CALCULATE ( SUM ( FactTaxiDaily[PassengerCount] ), DimTripEnd[TripEnd] = "Pickup" )
+			)
+		formatString: #,0
+		displayFolder: Mobility
+
+	/// Fare per trip weighted by trips (total fare / trips), never an average of daily averages.
+	measure 'Avg Fare USD' = DIVIDE ( SUM ( FactTaxiDaily[FareAmountUsd] ), SUM ( FactTaxiDaily[TripCount] ) )
+		formatString: \$#,0.00
+		displayFolder: Mobility
+
+	/// Miles per trip, weighted by trips.
+	measure 'Avg Trip Distance (mi)' = DIVIDE ( SUM ( FactTaxiDaily[TripDistanceMiles] ), SUM ( FactTaxiDaily[TripCount] ) )
+		formatString: #,0.00
+		displayFolder: Mobility
+
+	/// Minutes per trip, weighted by trips.
+	measure 'Avg Trip Duration (min)' = DIVIDE ( SUM ( FactTaxiDaily[TripDurationMinutes] ), SUM ( FactTaxiDaily[TripCount] ) )
+		formatString: #,0.0
+		displayFolder: Mobility
+
+	/// Total amount charged to passengers (TLC total_amount), US$, at the selected trip end, Pickup unless exactly one end is selected, so a trip never counts twice.
+	measure 'Revenue USD' =
+			IF (
+				HASONEVALUE ( DimTripEnd[TripEnd] ),
+				SUM ( FactTaxiDaily[TotalAmountUsd] ),
+				CALCULATE ( SUM ( FactTaxiDaily[TotalAmountUsd] ), DimTripEnd[TripEnd] = "Pickup" )
+			)
+		formatString: \$#,0
+		displayFolder: Economy
+
+	/// Each day's US$ total divided by that day's ECB rate, at the selected trip end, Pickup unless exactly one end is selected, so a trip never counts twice.
+	measure 'Revenue EUR' =
+			IF (
+				HASONEVALUE ( DimTripEnd[TripEnd] ),
+				SUM ( FactTaxiDaily[TotalAmountEur] ),
+				CALCULATE ( SUM ( FactTaxiDaily[TotalAmountEur] ), DimTripEnd[TripEnd] = "Pickup" )
+			)
+		formatString: €#,0
+		displayFolder: Economy
+
+	/// Revenue USD versus the same period last year.
+	measure 'Revenue YoY %' =
+			VAR ValueLastYear = CALCULATE ( [Revenue USD], SAMEPERIODLASTYEAR ( DimDate[Date] ) )
+			RETURN
+				DIVIDE ( [Revenue USD] - ValueLastYear, ValueLastYear )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Economy
+
+	/// Total amount per trip in US$, weighted by trips.
+	measure 'Avg Revenue per Trip USD' = DIVIDE ( SUM ( FactTaxiDaily[TotalAmountUsd] ), SUM ( FactTaxiDaily[TripCount] ) )
+		formatString: \$#,0.00
+		displayFolder: Economy
+
+	/// Total amount per trip in EUR, weighted by trips.
+	measure 'Avg Revenue per Trip EUR' = DIVIDE ( SUM ( FactTaxiDaily[TotalAmountEur] ), SUM ( FactTaxiDaily[TripCount] ) )
+		formatString: €#,0.00
+		displayFolder: Economy
+
+	/// Revenue USD converted at one rate: the mean EUR/USD rate of the whole selected period.
+	measure 'Revenue EUR at Period Avg Rate' =
+			DIVIDE ( [Revenue USD], CALCULATE ( [Avg USD per EUR], ALLSELECTED ( DimDate ) ) )
+		formatString: €#,0
+		displayFolder: Economy
+
+	/// Part of Revenue EUR caused by the exchange rate moving: negative when the euro was stronger than its period mean.
+	measure 'FX Effect EUR' = [Revenue EUR] - [Revenue EUR at Period Avg Rate]
+		formatString: €#,0
+		displayFolder: Economy
+
+	/// Taxi revenue per US$1bn of US GDP in the same years.
+	measure 'Revenue per US$1bn GDP' = DIVIDE ( [Revenue USD] * 1000000000, [US GDP (USD)] )
+		formatString: \$#,0
+		displayFolder: Economy
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	column ZoneKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: ZoneKey
+
+	column TripEndKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: TripEndKey
+
+	column TripCount
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: sum
+		sourceColumn: TripCount
+
+	column PassengerCount
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: sum
+		sourceColumn: PassengerCount
+
+	column TripDistanceMiles
+		dataType: double
+		isHidden
+		summarizeBy: sum
+		sourceColumn: TripDistanceMiles
+
+	column TripDurationMinutes
+		dataType: double
+		isHidden
+		summarizeBy: sum
+		sourceColumn: TripDurationMinutes
+
+	column FareAmountUsd
+		dataType: decimal
+		isHidden
+		summarizeBy: sum
+		sourceColumn: FareAmountUsd
+
+	column TotalAmountUsd
+		dataType: decimal
+		isHidden
+		summarizeBy: sum
+		sourceColumn: TotalAmountUsd
+
+	column FareAmountEur
+		dataType: decimal
+		isHidden
+		summarizeBy: sum
+		sourceColumn: FareAmountEur
+
+	column TotalAmountEur
+		dataType: decimal
+		isHidden
+		summarizeBy: sum
+		sourceColumn: TotalAmountEur
+
+	column AvgFareAmountUsd
+		dataType: decimal
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgFareAmountUsd
+
+	column AvgTotalAmountUsd
+		dataType: decimal
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgTotalAmountUsd
+
+	column AvgTotalAmountEur
+		dataType: decimal
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgTotalAmountEur
+
+	column AvgTripDistanceMiles
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgTripDistanceMiles
+
+	column AvgTripDurationMinutes
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgTripDurationMinutes
+
+	partition FactTaxiDaily = entity
+		mode: directLake
+		source
+			entityName: FactTaxiDaily
+			schemaName: dbo
+			expressionSource: DatabaseQuery

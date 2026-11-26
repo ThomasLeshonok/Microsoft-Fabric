@@ -1,0 +1,38 @@
+/// Hour of the day, 0 to 23, NYC wall clock; slices the hourly facts.
+table DimHour
+
+	column HourKey
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: HourKey
+
+	/// Hour as hh:00, sorted by hour.
+	column HourLabel
+		dataType: string
+		summarizeBy: none
+		sourceColumn: HourLabel
+		sortByColumn: HourKey
+
+	/// Night 0-5, Morning rush 6-9, Midday 10-15, Evening rush 16-19, Evening 20-23.
+	column DayPart
+		dataType: string
+		summarizeBy: none
+		sourceColumn: DayPart
+		sortByColumn: DayPartOrder
+
+	column DayPartOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DayPartOrder
+
+	partition DimHour = entity
+		mode: directLake
+		source
+			entityName: DimHour
+			schemaName: dbo
+			expressionSource: DatabaseQuery

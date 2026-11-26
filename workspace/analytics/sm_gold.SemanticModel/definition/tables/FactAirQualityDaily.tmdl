@@ -1,0 +1,112 @@
+/// OpenAQ air quality per day, zone and pollutant; sensor days below the completeness threshold are left out.
+table FactAirQualityDaily
+
+	/// Mean daily concentration weighted by reporting sensors; only meaningful for one pollutant (units differ).
+	measure 'Avg Concentration' =
+			DIVIDE (
+				SUMX ( FactAirQualityDaily, FactAirQualityDaily[AvgValue] * FactAirQualityDaily[SensorCount] ),
+				SUM ( FactAirQualityDaily[SensorCount] )
+			)
+		formatString: #,0.000
+		displayFolder: Air Quality
+
+	/// Mean daily PM2.5 weighted by reporting sensors.
+	measure 'PM2.5 (µg/m³)' = CALCULATE ( [Avg Concentration], FactAirQualityDaily[Pollutant] = "pm25" )
+		formatString: #,0.0
+		displayFolder: Air Quality
+
+	/// Mean daily NO2 weighted by reporting sensors; blank while no NO2 sensors report.
+	measure 'NO2 (ppm)' = CALCULATE ( [Avg Concentration], FactAirQualityDaily[Pollutant] = "no2" )
+		formatString: #,0.000
+		displayFolder: Air Quality
+
+	/// Highest PM2.5 sensor maximum in context.
+	measure 'Peak PM2.5 (µg/m³)' = CALCULATE ( MAX ( FactAirQualityDaily[MaxValue] ), FactAirQualityDaily[Pollutant] = "pm25" )
+		formatString: #,0.0
+		displayFolder: Air Quality
+
+	/// Trailing 30-day mean of the daily PM2.5, ending on the last day in context.
+	measure 'PM2.5 30-Day Avg' =
+			AVERAGEX ( DATESINPERIOD ( DimDate[Date], MAX ( DimDate[Date] ), -30, DAY ), [PM2.5 (µg/m³)] )
+		formatString: #,0.0
+		displayFolder: Air Quality
+
+	/// EPA 24-hour PM2.5 standard (NAAQS), µg/m³.
+	measure 'PM2.5 EPA 24h Standard' = 35
+		formatString: #,0
+		displayFolder: Air Quality
+
+	/// Days whose mean PM2.5 is above the EPA 24-hour standard.
+	measure 'PM2.5 Days Above EPA Standard' =
+			COALESCE (
+				COUNTROWS ( FILTER ( VALUES ( DimDate[Date] ), [PM2.5 (µg/m³)] > [PM2.5 EPA 24h Standard] ) ),
+				0
+			)
+		formatString: #,0
+		displayFolder: Air Quality
+
+	/// PM2.5 versus the same period last year.
+	measure 'PM2.5 YoY %' =
+			VAR ValueLastYear = CALCULATE ( [PM2.5 (µg/m³)], SAMEPERIODLASTYEAR ( DimDate[Date] ) )
+			RETURN
+				DIVIDE ( [PM2.5 (µg/m³)] - ValueLastYear, ValueLastYear )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Air Quality
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	column ZoneKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: ZoneKey
+
+	/// OpenAQ parameter (pm25, no2, ...).
+	column Pollutant
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Pollutant
+
+	/// Unit of the pollutant's values (µg/m³, ppm).
+	column Unit
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Unit
+
+	column SensorCount
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: sum
+		sourceColumn: SensorCount
+
+	column AvgValue
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgValue
+
+	column MinValue
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: MinValue
+
+	column MaxValue
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: MaxValue
+
+	partition FactAirQualityDaily = entity
+		mode: directLake
+		source
+			entityName: FactAirQualityDaily
+			schemaName: dbo
+			expressionSource: DatabaseQuery

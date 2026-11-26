@@ -1,0 +1,95 @@
+/// One row per calendar day, from 1 January of calendar_first_year to 31 December of the current year.
+table DimDate
+	dataCategory: Time
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	/// Calendar day.
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: Date
+
+	/// Calendar year.
+	column Year
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// Calendar quarter, 1 to 4.
+	column Quarter
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Quarter
+
+	column Month
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Month
+
+	/// Month name, sorted by month number.
+	column MonthName
+		dataType: string
+		summarizeBy: none
+		sourceColumn: MonthName
+		sortByColumn: Month
+
+	/// First day of the month; axis of the monthly visuals.
+	column MonthStartDate
+		dataType: dateTime
+		formatString: MMMM yyyy
+		summarizeBy: none
+		sourceColumn: MonthStartDate
+
+	/// Day of the month, 1 to 31.
+	column DayOfMonth
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DayOfMonth
+
+	column DayOfWeek
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DayOfWeek
+
+	/// Weekday name, sorted Monday first.
+	column DayName
+		dataType: string
+		summarizeBy: none
+		sourceColumn: DayName
+		sortByColumn: DayOfWeek
+
+	/// ISO week number.
+	column WeekOfYear
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: WeekOfYear
+
+	/// True on Saturday and Sunday.
+	column IsWeekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: IsWeekend
+
+	partition DimDate = entity
+		mode: directLake
+		source
+			entityName: DimDate
+			schemaName: dbo
+			expressionSource: DatabaseQuery

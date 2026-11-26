@@ -1,0 +1,70 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Select tables",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "tables",
+          "value": {
+            "value": "@if(equals(int(convertFromUtc(utcNow(), 'Eastern Standard Time', 'HH')), pipeline().parameters.daily_load_hour), 'sensors,hourly,daily', 'sensors,hourly')",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Append missing hours and days",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Select tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.02:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 300,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "86552656-47d7-482b-9a00-d385def26069",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "tables": {
+              "value": {
+                "value": "@variables('tables')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "load_mode": {
+              "value": "append_missing",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "daily_load_hour": {
+        "type": "int",
+        "defaultValue": 2
+      }
+    },
+    "variables": {
+      "tables": {
+        "type": "String"
+      }
+    },
+    "concurrency": 1
+  }
+}

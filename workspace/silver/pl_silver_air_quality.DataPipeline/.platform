@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_silver_air_quality",
+    "description": "Schedule hourly. Runs nb_silver_air_quality with load_mode append_missing: appends new sensors and missing finished hours per sensor; the run in NYC hour daily_load_hour also appends missing days. Never rewrites a reading."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "caef44c6-399d-4748-bf51-517319b5108e"
+  }
+}

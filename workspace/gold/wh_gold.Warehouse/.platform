@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Warehouse",
+    "displayName": "wh_gold",
+    "description": "Gold layer star schema loaded by nb_gold_star_schema: FactTaxiDaily, FactAirQualityDaily, FactTaxiHourly, FactAirQualityHourly, DimDate, DimZone, DimHour, DimTripEnd, DimFX, DimGDP.",
+    "creationPayload": {
+      "defaultCollation": "Latin1_General_100_BIN2_UTF8"
+    }
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d59cbaf4-76f9-4660-a077-b1380f6a7bd5"
+  }
+}

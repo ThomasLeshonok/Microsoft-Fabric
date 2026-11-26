@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_silver_taxi_trips",
+    "description": "Schedule monthly after pl_ingest_taxi. Runs nb_silver_taxi_trips with load_mode append_missing: appends only the bronze months after the latest month in silver_taxi_trips, never overwrites a month."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4c7da534-afe0-4eff-a737-fec333810169"
+  }
+}

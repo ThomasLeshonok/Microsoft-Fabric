@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_taxi_trips",
+    "description": "Normalizes each bronze yellow trip file to one schema, drops invalid trips and duplicates, adds time attributes and overwrites its month in lh_silver.silver_taxi_trips."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d04248a8-f06d-4ac5-a4d9-22e40f205cbc"
+  }
+}

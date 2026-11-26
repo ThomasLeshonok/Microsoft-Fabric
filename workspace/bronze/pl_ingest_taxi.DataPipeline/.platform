@@ -3,7 +3,7 @@
   "metadata": {
     "type": "DataPipeline",
     "displayName": "pl_ingest_taxi",
-    "description": "ForEach over a month list (locked scope from 2016-03); HTTP Copy of NYC TLC trip files to Files/nyctaxi_yellow/yyyy/MM/ plus taxi_zone_lookup.csv."
+    "description": "First run backfills NYC TLC trip files from 2016-03 to the latest published month, later runs copy only that month; plus taxi_zone_lookup.csv."
   },
   "config": {
     "version": "2.0",

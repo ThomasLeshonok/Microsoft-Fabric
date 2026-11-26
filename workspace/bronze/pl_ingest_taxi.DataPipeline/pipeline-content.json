@@ -1,0 +1,347 @@
+{
+    "name": "pl_ingest_taxi",
+    "objectId": "1d2787cb-695b-492d-a1ed-3237c1b8b5e1",
+    "properties": {
+        "description": "First run (no Files/trips/nyctaxi_<taxi_type>) backfills every month from locked_scope_start (2016-03), later runs only the latest published month (now minus publish_lag_months); HTTP Copy of NYC TLC trip files to yyyy/MM/ folders plus taxi_zone_lookup.csv.",
+        "activities": [
+            {
+                "name": "Set latest published month",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "latest_month",
+                    "value": {
+                        "value": "@addToTime(utcNow(), mul(-1, pipeline().parameters.publish_lag_months), 'Month', 'yyyy-MM')",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "Check trips folder",
+                "type": "GetMetadata",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.00:05:00",
+                    "retry": 1,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "datasetSettings": {
+                        "annotations": [],
+                        "linkedService": {
+                            "name": "lh_bronze",
+                            "properties": {
+                                "annotations": [],
+                                "type": "Lakehouse",
+                                "typeProperties": {
+                                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                    "artifactId": "d8e27bc1-d18a-4eb0-b5cb-a0d3f492a089",
+                                    "rootFolder": "Files"
+                                }
+                            }
+                        },
+                        "type": "Binary",
+                        "typeProperties": {
+                            "location": {
+                                "type": "AzureBlobStorageLocation",
+                                "folderPath": {
+                                    "value": "@concat('trips/nyctaxi_', pipeline().parameters.taxi_type)",
+                                    "type": "Expression"
+                                },
+                                "container": "trips"
+                            }
+                        }
+                    },
+                    "fieldList": [
+                        "exists"
+                    ],
+                    "storeSettings": {
+                        "type": "AzureBlobStorageReadSettings",
+                        "recursive": true,
+                        "enablePartitionDiscovery": false
+                    },
+                    "formatSettings": {
+                        "type": "BinaryReadSettings"
+                    }
+                }
+            },
+            {
+                "name": "Backfill or new month",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "Set latest published month",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "Check trips folder",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "first_month",
+                    "value": {
+                        "value": "@if(activity('Check trips folder').output.exists, variables('latest_month'), variables('locked_scope_start'))",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "List months",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Backfill or new month",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "items": {
+                        "value": "@range(0, add(sub(add(mul(int(substring(variables('latest_month'), 0, 4)), 12), int(substring(variables('latest_month'), 5, 2))), add(mul(int(substring(variables('first_month'), 0, 4)), 12), int(substring(variables('first_month'), 5, 2)))), 1))",
+                        "type": "Expression"
+                    },
+                    "isSequential": true,
+                    "activities": [
+                        {
+                            "name": "Append month",
+                            "type": "AppendVariable",
+                            "dependsOn": [],
+                            "typeProperties": {
+                                "variableName": "months",
+                                "value": {
+                                    "value": "@addToTime(concat(variables('first_month'), '-01T00:00:00Z'), item(), 'Month', 'yyyy-MM')",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "ForEach month",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "List months",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "items": {
+                        "value": "@variables('months')",
+                        "type": "Expression"
+                    },
+                    "isSequential": false,
+                    "batchCount": 8,
+                    "activities": [
+                        {
+                            "name": "Copy trip file",
+                            "type": "Copy",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.02:00:00",
+                                "retry": 2,
+                                "retryIntervalInSeconds": 60,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "typeProperties": {
+                                "source": {
+                                    "type": "BinarySource",
+                                    "storeSettings": {
+                                        "type": "HttpReadSettings",
+                                        "requestMethod": "GET"
+                                    },
+                                    "formatSettings": {
+                                        "type": "BinaryReadSettings"
+                                    },
+                                    "datasetSettings": {
+                                        "annotations": [],
+                                        "type": "Binary",
+                                        "typeProperties": {
+                                            "location": {
+                                                "type": "HttpServerLocation",
+                                                "relativeUrl": {
+                                                    "value": "@concat('trip-data/', pipeline().parameters.taxi_type, '_tripdata_', item(), '.parquet')",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        },
+                                        "externalReferences": {
+                                            "connection": "cf28ac4e-696e-410d-b1c7-bef98e20020c"
+                                        }
+                                    }
+                                },
+                                "sink": {
+                                    "type": "BinarySink",
+                                    "storeSettings": {
+                                        "type": "AzureBlobStorageWriteSettings"
+                                    },
+                                    "datasetSettings": {
+                                        "annotations": [],
+                                        "linkedService": {
+                                            "name": "lh_bronze",
+                                            "properties": {
+                                                "annotations": [],
+                                                "type": "Lakehouse",
+                                                "typeProperties": {
+                                                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                                    "artifactId": "d8e27bc1-d18a-4eb0-b5cb-a0d3f492a089",
+                                                    "rootFolder": "Files"
+                                                }
+                                            }
+                                        },
+                                        "type": "Binary",
+                                        "typeProperties": {
+                                            "location": {
+                                                "type": "AzureBlobStorageLocation",
+                                                "fileName": {
+                                                    "value": "@concat(pipeline().parameters.taxi_type, '_tripdata_', item(), '.parquet')",
+                                                    "type": "Expression"
+                                                },
+                                                "folderPath": {
+                                                    "value": "@concat('trips/nyctaxi_', pipeline().parameters.taxi_type, '/', replace(item(), '-', '/'))",
+                                                    "type": "Expression"
+                                                },
+                                                "container": "trips"
+                                            }
+                                        }
+                                    }
+                                },
+                                "enableStaging": false
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Copy taxi zone lookup",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.00:30:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 60,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                            "type": "HttpReadSettings",
+                            "requestMethod": "GET"
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextReadSettings"
+                        },
+                        "datasetSettings": {
+                            "annotations": [],
+                            "type": "DelimitedText",
+                            "typeProperties": {
+                                "location": {
+                                    "type": "HttpServerLocation",
+                                    "relativeUrl": "misc/taxi_zone_lookup.csv"
+                                },
+                                "columnDelimiter": ",",
+                                "escapeChar": "\\",
+                                "firstRowAsHeader": true,
+                                "quoteChar": "\""
+                            },
+                            "schema": [],
+                            "externalReferences": {
+                                "connection": "cf28ac4e-696e-410d-b1c7-bef98e20020c"
+                            }
+                        }
+                    },
+                    "sink": {
+                        "type": "LakehouseTableSink",
+                        "tableActionOption": "Append",
+                        "partitionOption": "None",
+                        "applyVOrder": false,
+                        "enableTimestampNtz": false,
+                        "datasetSettings": {
+                            "annotations": [],
+                            "linkedService": {
+                                "name": "lh_bronze",
+                                "properties": {
+                                    "annotations": [],
+                                    "type": "Lakehouse",
+                                    "typeProperties": {
+                                        "workspaceId": "00000000-0000-0000-0000-000000000000",
+                                        "artifactId": "d8e27bc1-d18a-4eb0-b5cb-a0d3f492a089",
+                                        "rootFolder": "Tables"
+                                    }
+                                }
+                            },
+                            "type": "LakehouseTable",
+                            "schema": [],
+                            "typeProperties": {
+                                "table": "taxi_zone_lookup"
+                            }
+                        }
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "taxi_type": {
+                "type": "string",
+                "defaultValue": "yellow"
+            },
+            "publish_lag_months": {
+                "type": "int",
+                "defaultValue": 2
+            },
+            "taxi_connection": {
+                "type": "string",
+                "defaultValue": "053690cb-e7c5-4fbe-913e-da6ed1c03143"
+            }
+        },
+        "variables": {
+            "locked_scope_start": {
+                "type": "String",
+                "defaultValue": "2016-03"
+            },
+            "latest_month": {
+                "type": "String"
+            },
+            "first_month": {
+                "type": "String"
+            },
+            "months": {
+                "type": "Array"
+            }
+        },
+        "lastModifiedByObjectId": "d1819090-f74f-4438-82b9-b61f2792adeb",
+        "lastPublishTime": "2026-11-06T13:08:05Z",
+        "concurrency": 1
+    }
+}

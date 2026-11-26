@@ -1,0 +1,88 @@
+/// OpenAQ air quality per day, NYC hour, zone and pollutant.
+table FactAirQualityHourly
+
+	/// Mean hourly concentration weighted by reporting sensors; only meaningful for one pollutant (units differ).
+	measure 'Hourly Avg Concentration' =
+			DIVIDE (
+				SUMX ( FactAirQualityHourly, FactAirQualityHourly[AvgValue] * FactAirQualityHourly[SensorCount] ),
+				SUM ( FactAirQualityHourly[SensorCount] )
+			)
+		formatString: #,0.000
+		displayFolder: Time of Day
+
+	/// Mean hourly PM2.5 weighted by reporting sensors.
+	measure 'Hourly PM2.5 (µg/m³)' = CALCULATE ( [Hourly Avg Concentration], FactAirQualityHourly[Pollutant] = "pm25" )
+		formatString: #,0.0
+		displayFolder: Time of Day
+
+	/// Mean hourly NO2 weighted by reporting sensors; blank while no NO2 sensors report.
+	measure 'Hourly NO2 (ppm)' = CALCULATE ( [Hourly Avg Concentration], FactAirQualityHourly[Pollutant] = "no2" )
+		formatString: #,0.000
+		displayFolder: Time of Day
+
+	/// Hour label with the highest PM2.5 in context.
+	measure 'Most Polluted Hour (PM2.5)' =
+			IF (
+				NOT ISBLANK ( [Hourly PM2.5 (µg/m³)] ),
+				MAXX ( TOPN ( 1, VALUES ( DimHour[HourLabel] ), [Hourly PM2.5 (µg/m³)] ), DimHour[HourLabel] )
+			)
+		displayFolder: Time of Day
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	column HourKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: HourKey
+
+	column ZoneKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: ZoneKey
+
+	/// OpenAQ parameter (pm25, no2, ...).
+	column Pollutant
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Pollutant
+
+	/// Unit of the pollutant's values (µg/m³, ppm).
+	column Unit
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Unit
+
+	column SensorCount
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: sum
+		sourceColumn: SensorCount
+
+	column AvgValue
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: AvgValue
+
+	column MaxValue
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: MaxValue
+
+	partition FactAirQualityHourly = entity
+		mode: directLake
+		source
+			entityName: FactAirQualityHourly
+			schemaName: dbo
+			expressionSource: DatabaseQuery

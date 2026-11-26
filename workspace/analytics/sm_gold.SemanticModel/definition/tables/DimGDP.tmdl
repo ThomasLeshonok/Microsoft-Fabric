@@ -1,0 +1,65 @@
+/// World Bank GDP (NY.GDP.MKTP.CD, current US$) per country and year. No relationship: DimDate[Year] is not unique, so the measures filter it with TREATAS.
+table DimGDP
+
+	/// US GDP (current US$) of the years in the DimDate context; DimGDP joins DimDate on Year, which is not unique in DimDate, so the filter goes through TREATAS instead of a relationship. Over several years it is the mean annual GDP.
+	measure 'US GDP (USD)' =
+			CALCULATE (
+				AVERAGE ( DimGDP[GdpUsd] ),
+				TREATAS ( VALUES ( DimDate[Year] ), DimGDP[Year] ),
+				DimGDP[CountryIso3] = "USA"
+			)
+		formatString: "\$#,0,,,""bn"""
+		displayFolder: Economy
+
+	/// US GDP growth versus the previous year, mean over the years in context.
+	measure 'US GDP Growth %' =
+			DIVIDE (
+				CALCULATE (
+					AVERAGE ( DimGDP[GdpGrowthPercent] ),
+					TREATAS ( VALUES ( DimDate[Year] ), DimGDP[Year] ),
+					DimGDP[CountryIso3] = "USA"
+				),
+				100
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Economy
+
+	/// Calendar year of the GDP figure.
+	column Year
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// ISO 3166-1 alpha-3 country code.
+	column CountryIso3
+		dataType: string
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: CountryIso3
+
+	/// Country name as published by the World Bank.
+	column CountryName
+		dataType: string
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: CountryName
+
+	column GdpUsd
+		dataType: decimal
+		isHidden
+		summarizeBy: none
+		sourceColumn: GdpUsd
+
+	column GdpGrowthPercent
+		dataType: double
+		isHidden
+		summarizeBy: none
+		sourceColumn: GdpGrowthPercent
+
+	partition DimGDP = entity
+		mode: directLake
+		source
+			entityName: DimGDP
+			schemaName: dbo
+			expressionSource: DatabaseQuery

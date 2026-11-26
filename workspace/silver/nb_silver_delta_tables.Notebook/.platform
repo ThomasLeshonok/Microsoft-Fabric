@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_delta_tables",
+    "description": "Shared by the silver notebooks through %run: typed Delta table DDL and load modes, rule counts and exit reports, latest ingestion, OneLake paths, and SilverDataset + load_dataset for simple API sources."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "349ba635-b722-4faa-8aca-9076c291dbca"
+  }
+}

@@ -1,0 +1,104 @@
+/// NYC TLC taxi trips per day, NYC hour, zone and trip end.
+table FactTaxiHourly
+
+	/// Number of taxi trips from the hourly fact, at the selected trip end, Pickup unless exactly one end is selected, so a trip never counts twice; use with DimHour.
+	measure 'Hourly Trips' =
+			IF (
+				HASONEVALUE ( DimTripEnd[TripEnd] ),
+				SUM ( FactTaxiHourly[TripCount] ),
+				CALCULATE ( SUM ( FactTaxiHourly[TripCount] ), DimTripEnd[TripEnd] = "Pickup" )
+			)
+		formatString: #,0
+		displayFolder: Time of Day
+
+	/// Mean trips per day in the hours in context, over the selected days that have trips anywhere.
+	measure 'Trips per Day in Hour' =
+			VAR DaysWithTrips =
+				COUNTROWS ( CALCULATETABLE ( VALUES ( FactTaxiHourly[DateKey] ), REMOVEFILTERS ( DimHour ), REMOVEFILTERS ( DimZone ) ) )
+			RETURN
+				DIVIDE ( [Hourly Trips], DaysWithTrips )
+		formatString: #,0
+		displayFolder: Time of Day
+
+	/// Hour label with the most trips in context.
+	measure 'Busiest Hour' =
+			IF (
+				NOT ISBLANK ( [Hourly Trips] ),
+				MAXX ( TOPN ( 1, VALUES ( DimHour[HourLabel] ), [Hourly Trips] ), DimHour[HourLabel] )
+			)
+		displayFolder: Time of Day
+
+	/// Pearson correlation between trips and the mean of one pollutant, one point per day: within an hour filter the day's trips and pollution in those hours. Blank for several pollutants at once or fewer than 30 days with both.
+	measure 'Trips vs Pollution Correlation' =
+			VAR MinimumDays = 30
+			VAR DailyPoints =
+				FILTER (
+					ADDCOLUMNS ( VALUES ( DimDate[Date] ), "@Trips", [Hourly Trips], "@Pollution", [Hourly Avg Concentration] ),
+					NOT ISBLANK ( [@Trips] ) && NOT ISBLANK ( [@Pollution] )
+				)
+			VAR MeanTrips = AVERAGEX ( DailyPoints, [@Trips] )
+			VAR MeanPollution = AVERAGEX ( DailyPoints, [@Pollution] )
+			VAR Covariance = SUMX ( DailyPoints, ( [@Trips] - MeanTrips ) * ( [@Pollution] - MeanPollution ) )
+			VAR TripsSpread = SQRT ( SUMX ( DailyPoints, ( [@Trips] - MeanTrips ) ^ 2 ) )
+			VAR PollutionSpread = SQRT ( SUMX ( DailyPoints, ( [@Pollution] - MeanPollution ) ^ 2 ) )
+			RETURN
+				IF (
+					HASONEVALUE ( FactAirQualityHourly[Pollutant] ) && COUNTROWS ( DailyPoints ) >= MinimumDays,
+					DIVIDE ( Covariance, TripsSpread * PollutionSpread )
+				)
+		formatString: 0.00
+		displayFolder: Mobility vs Air Quality
+
+	/// Trips vs Pollution Correlation for PM2.5.
+	measure 'Trips vs PM2.5 Correlation' =
+			CALCULATE ( [Trips vs Pollution Correlation], FactAirQualityHourly[Pollutant] = "pm25" )
+		formatString: 0.00
+		displayFolder: Mobility vs Air Quality
+
+	/// Trips vs Pollution Correlation for NO2.
+	measure 'Trips vs NO2 Correlation' =
+			CALCULATE ( [Trips vs Pollution Correlation], FactAirQualityHourly[Pollutant] = "no2" )
+		formatString: 0.00
+		displayFolder: Mobility vs Air Quality
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	column HourKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: HourKey
+
+	column ZoneKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: ZoneKey
+
+	column TripEndKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: TripEndKey
+
+	column TripCount
+		dataType: int64
+		isHidden
+		formatString: 0
+		summarizeBy: sum
+		sourceColumn: TripCount
+
+	partition FactTaxiHourly = entity
+		mode: directLake
+		source
+			entityName: FactTaxiHourly
+			schemaName: dbo
+			expressionSource: DatabaseQuery

@@ -1,0 +1,24 @@
+/// End of a taxi trip; slices the taxi facts. Pickup counts trips by where they start, Dropoff by where they end; the trip measures use Pickup unless exactly one end is selected.
+table DimTripEnd
+
+	column TripEndKey
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: TripEndKey
+
+	/// Pickup or Dropoff.
+	column TripEnd
+		dataType: string
+		summarizeBy: none
+		sourceColumn: TripEnd
+		sortByColumn: TripEndKey
+
+	partition DimTripEnd = entity
+		mode: directLake
+		source
+			entityName: DimTripEnd
+			schemaName: dbo
+			expressionSource: DatabaseQuery

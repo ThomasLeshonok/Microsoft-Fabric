@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_taxi_zones",
+    "description": "Cleans the bronze taxi zone lookup, converts the taxi_zones shapefile (EPSG:2263) to longitude/latitude GeoJSON boundaries and overwrites silver_taxi_zones."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e269bf2a-df59-4191-b5ea-0ead167c80ff"
+  }
+}

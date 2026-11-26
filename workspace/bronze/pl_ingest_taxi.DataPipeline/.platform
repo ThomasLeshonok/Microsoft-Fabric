@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_ingest_taxi",
+    "description": "First run backfills NYC TLC trip files from 2016-03 to the latest published month, later runs copy only that month; plus taxi_zone_lookup.csv."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e6f7ad99-c0f6-4ef6-aacf-cf9ec5fb666a"
+  }
+}

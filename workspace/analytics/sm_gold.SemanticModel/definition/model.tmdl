@@ -1,0 +1,20 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DatabaseQuery"]
+
+ref table DimDate
+ref table DimZone
+ref table DimFX
+ref table DimGDP
+ref table FactTaxiDaily
+ref table FactAirQualityDaily
+ref table DimHour
+ref table DimTripEnd
+ref table FactTaxiHourly
+ref table FactAirQualityHourly

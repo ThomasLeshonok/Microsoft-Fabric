@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_silver_startup",
+    "description": "Run once (or after rule/schema changes) to build silver from scratch with load_mode rebuild: taxi zones, then air quality; taxi trips, ECB exchange rates and World Bank indicators in parallel."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7aba1aa7-a069-45e4-8b6c-65303190d9f8"
+  }
+}

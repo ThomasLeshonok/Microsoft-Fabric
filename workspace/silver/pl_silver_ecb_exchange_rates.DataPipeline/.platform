@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_silver_ecb_exchange_rates",
+    "description": "Schedule daily after df_ecb_exchange_rates. Runs nb_silver_ecb_exchange_rates with load_mode append_missing: appends only the days after the latest day per currency pair in silver_ecb_exchange_rates, never overwrites a day."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3ce19da3-f2b4-413f-94d5-f1dc8e00a7f6"
+  }
+}

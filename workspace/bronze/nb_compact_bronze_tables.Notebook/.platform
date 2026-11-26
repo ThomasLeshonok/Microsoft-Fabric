@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_compact_bronze_tables",
+    "description": "Compacts small parquet files in lh_bronze Delta tables: OPTIMIZE into files of at most target_file_size_bytes (1 MB), then VACUUM."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "4c790365-5d76-44ed-a5f1-308fe63c470d"
+  }
+}

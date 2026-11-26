@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.env
+/startup.md
+/scripts/openaq_local_debug.py
+/openaq_local_output/
+/task.md
+/fix_plan.md

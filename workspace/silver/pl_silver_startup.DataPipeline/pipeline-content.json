@@ -1,0 +1,126 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Rebuild taxi zones",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "e269bf2a-df59-4191-b5ea-0ead167c80ff",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        }
+      },
+      {
+        "name": "Rebuild air quality",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Rebuild taxi zones",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "86552656-47d7-482b-9a00-d385def26069",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "tables": {
+              "value": "sensors,hourly,daily",
+              "type": "string"
+            },
+            "load_mode": {
+              "value": "rebuild",
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "Rebuild taxi trips",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "1.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "d04248a8-f06d-4ac5-a4d9-22e40f205cbc",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "load_mode": {
+              "value": "rebuild",
+              "type": "string"
+            },
+            "months": {
+              "value": "",
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "Rebuild exchange rates",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "a0848af0-1a8d-497a-ade7-1a24593da690",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "load_mode": {
+              "value": "rebuild",
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "Rebuild World Bank indicators",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "a4edf343-bb6c-46c4-8801-2c3946b12cba",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "load_mode": {
+              "value": "rebuild",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "concurrency": 1
+  }
+}

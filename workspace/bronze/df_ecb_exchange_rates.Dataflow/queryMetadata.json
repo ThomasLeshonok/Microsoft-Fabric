@@ -1,0 +1,35 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "df_ecb_exchange_rates",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "bronze_ecb_exchange_rates": {
+      "queryId": "e3dfd86f-007c-4795-a9ff-c2f5d23f857a",
+      "queryName": "bronze_ecb_exchange_rates",
+      "loadEnabled": true
+    },
+    "bronze_ecb_exchange_rates_DataDestination": {
+      "queryId": "58d772cf-9d79-4e72-8bee-e19dd8f207bc",
+      "queryName": "bronze_ecb_exchange_rates_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    }
+  },
+  "fastCombine": true,
+  "allowNativeQueries": true,
+  "skipAutomaticTypeAndHeaderDetection": false,
+  "connections": [
+    {
+      "path": "https://data-api.ecb.europa.eu/",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"14001473-0fcc-4681-805a-613e797fe1c6\",\"DatasourceId\":\"a51f3557-434b-414c-8b17-83d5fb135687\"}"
+    },
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"14001473-0fcc-4681-805a-613e797fe1c6\",\"DatasourceId\":\"1e415473-7adf-48d4-9c44-65dcc6b99a35\"}"
+    }
+  ]
+}

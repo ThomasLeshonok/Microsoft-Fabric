@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_silver_air_quality",
+    "description": "Cleans bronze OpenAQ tables: drops redundant columns and invalid rows, adds date/time attributes, joins sensors to locations and zones. append_missing appends new sensors and per-sensor missing finished hours/days; rebuild overwrites all."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "86552656-47d7-482b-9a00-d385def26069"
+  }
+}

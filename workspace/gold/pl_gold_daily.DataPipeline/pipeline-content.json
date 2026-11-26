@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Append missing days",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.02:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 300,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "99ddeb5e-b423-4c92-a2ff-1f82b7c4d922",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "load_mode": {
+              "value": "append_missing",
+              "type": "string"
+            },
+            "tables": {
+              "value": "DimDate,DimFX,FactAirQualityDaily",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "concurrency": 1
+  }
+}

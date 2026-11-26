@@ -1,0 +1,144 @@
+{
+  "formatVersion": "202502",
+  "computeEngineSettings": {},
+  "name": "df_openaq_nyc",
+  "queryGroups": [],
+  "documentLocale": "en-US",
+  "queriesMetadata": {
+    "OpenAQApiKey": {
+      "queryId": "2210aab4-51f1-43c3-99aa-62f013db645c",
+      "queryName": "OpenAQApiKey",
+      "loadEnabled": false
+    },
+    "NycBoundingBox": {
+      "queryId": "9792c7bc-dc27-4485-b929-5e54975aa351",
+      "queryName": "NycBoundingBox",
+      "loadEnabled": false
+    },
+    "LookbackHours": {
+      "queryId": "912d9ae2-88a9-4a6d-98a0-d3959e223b43",
+      "queryName": "LookbackHours",
+      "loadEnabled": false
+    },
+    "OpenAQRunWindow": {
+      "queryId": "0e2d86a8-143b-43ab-946c-213f332f3a16",
+      "queryName": "OpenAQRunWindow",
+      "loadEnabled": false
+    },
+    "OpenAQUtcFromText": {
+      "queryId": "e5607212-ffbc-42b4-b51c-b16ee78b01e2",
+      "queryName": "OpenAQUtcFromText",
+      "loadEnabled": false
+    },
+    "OpenAQBronzeTable": {
+      "queryId": "73f7a37d-20e2-4d03-95e3-4f711a55b702",
+      "queryName": "OpenAQBronzeTable",
+      "loadEnabled": false
+    },
+    "ExcludedParameters": {
+      "queryId": "8107b346-e6d6-45fc-a88c-5902db202429",
+      "queryName": "ExcludedParameters",
+      "loadEnabled": false
+    },
+    "OpenAQGetAllPages": {
+      "queryId": "ececded5-7f2d-4ce5-a4f5-4f41a0b540d2",
+      "queryName": "OpenAQGetAllPages",
+      "loadEnabled": false
+    },
+    "OpenAQUtcToText": {
+      "queryId": "6ca5ad9a-7054-465b-b1c5-0c5c4436b298",
+      "queryName": "OpenAQUtcToText",
+      "loadEnabled": false
+    },
+    "OpenAQMonthWindows": {
+      "queryId": "65a20b2d-222e-4cab-b168-e027e4ecd6e8",
+      "queryName": "OpenAQMonthWindows",
+      "loadEnabled": false
+    },
+    "openaq_locations_raw": {
+      "queryId": "f7a451fd-82c3-4176-82dd-5f7fea0a37f5",
+      "queryName": "openaq_locations_raw",
+      "loadEnabled": false
+    },
+    "OpenAQFetchPlan": {
+      "queryId": "0f584d15-9d10-41f7-a9ac-2daa8cb7c948",
+      "queryName": "OpenAQFetchPlan",
+      "loadEnabled": false
+    },
+    "OpenAQOnlyNewRows": {
+      "queryId": "3c2734f9-a768-452d-8a41-b7036532ea1f",
+      "queryName": "OpenAQOnlyNewRows",
+      "loadEnabled": false
+    },
+    "bronze_openaq_locations": {
+      "queryId": "0d6a9f43-5f0e-4c39-9d43-2e5b7c1a8f01",
+      "queryName": "bronze_openaq_locations",
+      "loadEnabled": true
+    },
+    "bronze_openaq_sensors": {
+      "queryId": "1e7b0a54-6a1f-4d4a-8e54-3f6c8d2b9a12",
+      "queryName": "bronze_openaq_sensors",
+      "loadEnabled": true
+    },
+    "bronze_openaq_sensor_days": {
+      "queryId": "2f8c1b65-7b2a-4e5b-9f65-4a7d9e3cab23",
+      "queryName": "bronze_openaq_sensor_days",
+      "loadEnabled": true
+    },
+    "bronze_openaq_sensor_measurements": {
+      "queryId": "54da3eb6-ac59-4014-b595-ecd7d69f2312",
+      "queryName": "bronze_openaq_sensor_measurements",
+      "loadEnabled": true
+    },
+    "bronze_openaq_locations_DataDestination": {
+      "queryId": "3a9d2c76-8c3b-4f6c-a076-5b8eaf4dbc34",
+      "queryName": "bronze_openaq_locations_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "bronze_openaq_sensors_DataDestination": {
+      "queryId": "4bae3d87-9d4c-4a7d-b187-6c9fb05ecd45",
+      "queryName": "bronze_openaq_sensors_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "bronze_openaq_sensor_days_DataDestination": {
+      "queryId": "5cbf4e98-ae5d-4b8e-8298-7da0c16fde56",
+      "queryName": "bronze_openaq_sensor_days_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "bronze_openaq_sensor_measurements_DataDestination": {
+      "queryId": "b698a345-a79f-4c26-a196-7ebc1039f3ff",
+      "queryName": "bronze_openaq_sensor_measurements_DataDestination",
+      "isHidden": true,
+      "loadEnabled": false
+    },
+    "OpenAQWithoutExistingKeys": {
+      "queryId": "babe5f82-85a5-4e15-ada0-c1da636c77c3",
+      "queryName": "OpenAQWithoutExistingKeys",
+      "loadEnabled": false
+    },
+    "openaq_sensors_raw": {
+      "queryId": "ffa2480d-c291-4bf4-94f2-ff3f2ba04758",
+      "queryName": "openaq_sensors_raw",
+      "loadEnabled": false
+    }
+  },
+  "fastCombine": true,
+  "allowNativeQueries": true,
+  "skipAutomaticTypeAndHeaderDetection": false,
+  "parametric": true,
+  "connections": [
+    {
+      "path": "https://api.openaq.org/",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"14001473-0fcc-4681-805a-613e797fe1c6\",\"DatasourceId\":\"ed1b4354-2874-4098-acef-a93043d336bb\"}"
+    },
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"14001473-0fcc-4681-805a-613e797fe1c6\",\"DatasourceId\":\"e54ffb15-64d1-4406-8568-8e2cf9067825\"}"
+    }
+  ]
+}

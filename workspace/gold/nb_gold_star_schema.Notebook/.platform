@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_gold_star_schema",
+    "description": "Builds the gold star schema from lh_silver and writes it to wh_gold: load_mode rebuild overwrites the selected tables, append_missing (pl_gold_hourly, pl_gold_daily, pl_gold_monthly) appends only rows newer than the latest period in wh_gold."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "99ddeb5e-b423-4c92-a2ff-1f82b7c4d922"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Append missing month",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.04:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 300,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "d04248a8-f06d-4ac5-a4d9-22e40f205cbc",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "load_mode": {
+              "value": "append_missing",
+              "type": "string"
+            },
+            "months": {
+              "value": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "concurrency": 1
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Set load day",
+        "type": "SetVariable",
+        "dependsOn": [],
+        "policy": {
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "variableName": "load_day",
+          "value": {
+            "value": "@if(empty(pipeline().parameters.day), formatDateTime(addDays(utcNow(), -1), 'yyyy-MM-dd'), pipeline().parameters.day)",
+            "type": "Expression"
+          }
+        }
+      },
+      {
+        "name": "Backfill or daily",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "Set load day",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@pipeline().parameters.run_backfill",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "name": "Backfill with nb_ingest_openaq",
+              "type": "TridentNotebook",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "1.00:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "notebookId": "c7d16ab0-c07f-4daf-a4ba-9fc2e3819f78",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "parameters": {
+                  "date_from": {
+                    "value": {
+                      "value": "@pipeline().parameters.backfill_date_from",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "date_to": {
+                    "value": {
+                      "value": "@variables('load_day')",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "ifFalseActivities": [
+            {
+              "name": "Get OpenAQ key",
+              "type": "WebActivity",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.00:05:00",
+                "retry": 1,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": true,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "method": "GET",
+                "relativeUrl": "secrets/openaq-api-key?api-version=7.4"
+              },
+              "externalReferences": {
+                "connection": "03de75a2-df3d-48ea-aec3-aa360acdcdfa"
+              }
+            },
+            {
+              "name": "Set OpenAQ key",
+              "type": "SetVariable",
+              "dependsOn": [
+                {
+                  "activity": "Get OpenAQ key",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "secureOutput": true,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "variableName": "openaq_api_key",
+                "value": {
+                  "value": "@activity('Get OpenAQ key').output.value",
+                  "type": "Expression"
+                }
+              }
+            },
+            {
+              "name": "Run df_openaq_nyc",
+              "type": "RefreshDataflow",
+              "dependsOn": [
+                {
+                  "activity": "Set OpenAQ key",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 2,
+                "retryIntervalInSeconds": 1800,
+                "secureOutput": false,
+                "secureInput": true
+              },
+              "typeProperties": {
+                "dataflowId": "b6c05fa9-bf6e-4c9f-93a9-8eb1d2708e67",
+                "workspaceId": "00000000-0000-0000-0000-000000000000",
+                "notifyOption": "NoNotification",
+                "dataflowType": "DataflowFabric",
+                "parameters": {
+                  "OpenAQApiKey": {
+                    "value": {
+                      "value": "@variables('openaq_api_key')",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  },
+                  "LookbackHours": {
+                    "value": {
+                      "value": "@string(pipeline().parameters.lookback_hours)",
+                      "type": "Expression"
+                    },
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Compact after backfill or on request",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "Backfill or daily",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "value": "@or(pipeline().parameters.run_backfill, pipeline().parameters.compact_tables)",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "name": "Compact with nb_compact_bronze_tables",
+              "type": "TridentNotebook",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.01:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "typeProperties": {
+                "notebookId": "4c790365-5d76-44ed-a5f1-308fe63c470d",
+                "workspaceId": "00000000-0000-0000-0000-000000000000"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "parameters": {
+      "run_backfill": {
+        "type": "bool",
+        "defaultValue": false
+      },
+      "backfill_date_from": {
+        "type": "string",
+        "defaultValue": "2016-03-01"
+      },
+      "day": {
+        "type": "string",
+        "defaultValue": ""
+      },
+      "lookback_hours": {
+        "type": "int",
+        "defaultValue": 3
+      },
+      "compact_tables": {
+        "type": "bool",
+        "defaultValue": false
+      }
+    },
+    "variables": {
+      "openaq_api_key": {
+        "type": "String"
+      },
+      "load_day": {
+        "type": "String"
+      }
+    },
+    "concurrency": 1
+  }
+}

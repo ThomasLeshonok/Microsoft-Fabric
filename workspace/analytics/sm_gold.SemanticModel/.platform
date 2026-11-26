@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "sm_gold",
+    "description": "Direct Lake semantic model on the wh_gold star schema: relationships, date table and the measures behind rpt_nyc_insights."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f1dfbd2b-e043-4324-8337-1585a7582c89"
+  }
+}

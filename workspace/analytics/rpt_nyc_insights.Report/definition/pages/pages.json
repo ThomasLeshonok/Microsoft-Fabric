@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "pageOrder": [
+    "mobility",
+    "air_quality",
+    "mobility_vs_air_quality",
+    "time_of_day",
+    "no2",
+    "economic_impact"
+  ],
+  "activePageName": "mobility"
+}

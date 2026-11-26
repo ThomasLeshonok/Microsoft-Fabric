@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "pl_ingest_openaq",
+    "description": "Daily (default): reads the OpenAQ key from Key Vault into a variable and runs df_openaq_nyc for one day (yesterday unless day is set). run_backfill = true instead runs nb_ingest_openaq from backfill_date_from to that day."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d3c12e12-c404-42fd-a7a5-b86ba3e342c2"
+  }
+}

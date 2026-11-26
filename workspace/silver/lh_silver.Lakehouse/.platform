@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "lh_silver",
+    "description": "Silver layer: cleaned, deduplicated Delta tables with a fixed schema (silver_taxi_trips, silver_air_quality_hourly, silver_air_quality_daily, silver_air_quality_sensors, silver_worldbank_indicators, silver_ecb_exchange_rates)."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "80bcc451-4b85-4233-acd9-cd92e59035bf"
+  }
+}

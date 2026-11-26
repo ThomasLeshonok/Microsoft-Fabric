@@ -1,11 +1,12 @@
 section Section1;
 
-[DataDestinations = {[Definition = [Kind = "Reference", QueryName = "bronze_worldbank_indicators_DataDestination", IsNewTarget = true], Settings = [Kind = "Automatic", TypeSettings = [Kind = "Table"]]]}]
+[DataDestinations = {[Definition = [Kind = "Reference", QueryName = "bronze_worldbank_indicators_DataDestination", IsNewTarget = true], Settings = [Kind = "Manual", AllowCreation = true, ColumnSettings = [Mappings = {[SourceColumnName = "indicator_id", DestinationColumnName = "indicator_id"], [SourceColumnName = "indicator_name", DestinationColumnName = "indicator_name"], [SourceColumnName = "country_id", DestinationColumnName = "country_id"], [SourceColumnName = "country_name", DestinationColumnName = "country_name"], [SourceColumnName = "country_iso3", DestinationColumnName = "country_iso3"], [SourceColumnName = "period", DestinationColumnName = "period"], [SourceColumnName = "value", DestinationColumnName = "value"], [SourceColumnName = "unit", DestinationColumnName = "unit"], [SourceColumnName = "obs_status", DestinationColumnName = "obs_status"], [SourceColumnName = "decimals", DestinationColumnName = "decimals"], [SourceColumnName = "ingested_at", DestinationColumnName = "ingested_at"]}], DynamicSchema = false, UpdateMethod = [Kind = "Append"], TypeSettings = [Kind = "Table"]]]}]
 shared bronze_worldbank_indicators = let
-    Country = "all",
-    Indicator = "NY.GDP.PCAP.CD",
+    Country = "USA",
+    Indicator = "NY.GDP.MKTP.CD",
     DateRange = "2016:" & Text.From(Date.Year(DateTimeZone.UtcNow())),
     PerPage = 1000,
+    Key = {"indicator_id", "country_iso3", "period"},
     GetPage = (page as number) as list =>
         Json.Document(
             Web.Contents(
@@ -28,19 +29,22 @@ shared bronze_worldbank_indicators = let
     Typed = Table.TransformColumnTypes(
         Renamed,
         {
-            {"indicator_id", type text},
-            {"indicator_name", type text},
-            {"country_id", type text},
-            {"country_name", type text},
-            {"country_iso3", type text},
-            {"period", type text},
-            {"value", type number},
-            {"unit", type text},
-            {"obs_status", type text},
+            {"indicator_id", type nullable text},
+            {"indicator_name", type nullable text},
+            {"country_id", type nullable text},
+            {"country_name", type nullable text},
+            {"country_iso3", type nullable text},
+            {"period", type nullable text},
+            {"value", type nullable number},
+            {"unit", type nullable text},
+            {"obs_status", type nullable text},
             {"decimals", Int64.Type}
         }
     ),
-    WithIngestedAt = Table.AddColumn(Typed, "ingested_at", each DateTimeZone.RemoveZone(DateTimeZone.UtcNow()), type datetime)
+    Published = Table.SelectRows(Typed, each [value] <> null),
+    Existing = Lakehouse.Contents([CreateNavigationProperties = false, EnableFolding = true]){[workspaceId = "."]}[Data]{[lakehouseName = "lh_bronze"]}[Data]{[Id = "bronze_worldbank_indicators", ItemKind = "Table"]}?[Data]?,
+    NewRows = if Existing = null then Published else Table.RemoveColumns(Table.NestedJoin(Published, Key, Table.SelectColumns(Existing, Key), Key, "existing", JoinKind.LeftAnti), {"existing"}),
+    WithIngestedAt = Table.AddColumn(NewRows, "ingested_at", each DateTimeZone.RemoveZone(DateTimeZone.UtcNow()), type datetime)
 in
     WithIngestedAt;
 

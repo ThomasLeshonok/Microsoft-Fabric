@@ -17,7 +17,19 @@
       "loadEnabled": false
     }
   },
-  "fastCombine": false,
+  "fastCombine": true,
   "allowNativeQueries": true,
-  "skipAutomaticTypeAndHeaderDetection": false
+  "skipAutomaticTypeAndHeaderDetection": false,
+  "connections": [
+    {
+      "path": "https://data-api.ecb.europa.eu/",
+      "kind": "Web",
+      "connectionId": "{\"ClusterId\":\"14001473-0fcc-4681-805a-613e797fe1c6\",\"DatasourceId\":\"a51f3557-434b-414c-8b17-83d5fb135687\"}"
+    },
+    {
+      "path": "Lakehouse",
+      "kind": "Lakehouse",
+      "connectionId": "{\"ClusterId\":\"14001473-0fcc-4681-805a-613e797fe1c6\",\"DatasourceId\":\"1e415473-7adf-48d4-9c44-65dcc6b99a35\"}"
+    }
+  ]
 }
